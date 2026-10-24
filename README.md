@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PLUT Admin Dashboard
 
-## Getting Started
+Dashboard admin mandiri (Next.js, port 3001) untuk mengelola katalog produk UMKM Kebumen.
+Terpisah dari web publik (port 3000) dan dari backend API (repo `plut-api`, port 8000).
 
-First, run the development server:
+## Fitur
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Login admin dengan token Sanctum, lupa password, dan atur ulang password
+- Kelola produk: lihat, cari, filter, tambah, edit, hapus
+- Unggah foto produk dengan konfirmasi dan pratinjau
+- Sanitasi input, batas panjang, notifikasi, dan konfirmasi hapus
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Menjalankan
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Prasyarat: Node.js dan API `plut-api` yang sudah berjalan di http://127.0.0.1:8000.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    npm install
+    copy .env.example .env.local
+    npm run dev
 
-## Learn More
+Buka http://127.0.0.1:3001 (gunakan 127.0.0.1, bukan localhost).
 
-To learn more about Next.js, take a look at the following resources:
+## Variabel lingkungan
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- NEXT_PUBLIC_API_URL: alamat API Laravel
+- NEXT_PUBLIC_SITE_URL: alamat web publik, untuk menampilkan foto produk bawaan
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Struktur
 
-## Deploy on Vercel
+- app/admin/login, forgot-password, reset-password: halaman akun
+- app/admin/dashboard: ringkasan dan kelola produk (dilindungi sesi)
+- components: komponen UI (dialog, notifikasi, form produk)
+- lib: klien API (Axios, Bearer token), logika produk, sanitasi
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Catatan keamanan
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Semua halaman di /admin/dashboard memerlukan token yang valid
+- Token disimpan di localStorage dan dicabut saat keluar
+- Jangan commit file .env.local
