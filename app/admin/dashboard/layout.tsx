@@ -50,7 +50,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 lg:flex">
+    <div className="plut-dark plut-glow min-h-screen bg-slate-50 text-slate-900 lg:flex">
       <aside className="hidden w-64 shrink-0 flex-col bg-neutral-950 text-neutral-300 lg:sticky lg:top-0 lg:flex lg:h-screen">
         <div className="flex items-center gap-3 px-6 py-6">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 font-bold text-neutral-950 shadow-lg shadow-emerald-500/20">

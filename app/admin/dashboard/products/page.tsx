@@ -4,10 +4,13 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { CATEGORIES, deleteProduk, displayPrice, fetchAllProduk, LOW_STOCK, Produk } from "@/lib/produk";
 import { BadgePill, Icon, StockPill, Thumb } from "@/components/ui";
+import { ConfirmDialog } from "@/components/Dialog";
+import { useToast } from "@/components/Toast";
 
 const PER_PAGE = 20;
 
 export default function ProductsPage() {
+  const { notify } = useToast();
   const [items, setItems] = useState<Produk[]>([]);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("");
@@ -15,6 +18,8 @@ export default function ProductsPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [target, setTarget] = useState<Produk | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     fetchAllProduk()
@@ -37,13 +42,19 @@ export default function ProductsPage() {
   const current = Math.min(page, pages);
   const rows = filtered.slice((current - 1) * PER_PAGE, current * PER_PAGE);
 
-  async function remove(p: Produk) {
-    if (!confirm('Hapus "' + p.name + '"? Tindakan ini tidak bisa dibatalkan.')) return;
+  async function confirmDelete() {
+    if (!target) return;
+    setDeleting(true);
     try {
-      await deleteProduk(p.id);
-      setItems((prev) => prev.filter((x) => x.id !== p.id));
+      await deleteProduk(target.id);
+      setItems((prev) => prev.filter((x) => x.id !== target.id));
+      notify("success", 'Produk "' + target.name + '" berhasil dihapus.');
+      setTarget(null);
     } catch (e) {
-      setError((e as Error).message);
+      notify("error", (e as Error).message || "Gagal menghapus produk.");
+      setTarget(null);
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -75,6 +86,7 @@ export default function ProductsPage() {
           </span>
           <input
             value={q}
+            maxLength={120}
             onChange={(e) => {
               setQ(e.target.value);
               setPage(1);
@@ -163,7 +175,7 @@ export default function ProductsPage() {
                         <Icon name="edit" className="h-5 w-5" />
                       </Link>
                       <button
-                        onClick={() => remove(p)}
+                        onClick={() => setTarget(p)}
                         aria-label={"Hapus " + p.name}
                         className="inline-flex rounded-lg p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600"
                       >
@@ -205,6 +217,18 @@ export default function ProductsPage() {
           </button>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={!!target}
+        tone="danger"
+        icon="trash"
+        title="Hapus produk ini?"
+        message={target ? '"' + target.name + '" akan dihapus permanen dan tidak bisa dikembalikan.' : ""}
+        confirmLabel="Ya, hapus"
+        loading={deleting}
+        onConfirm={confirmDelete}
+        onCancel={() => setTarget(null)}
+      />
     </main>
   );
 }
