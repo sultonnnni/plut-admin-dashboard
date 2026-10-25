@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { getCurrentUser, logout } from "@/lib/api";
 import { Icon, IconName } from "@/components/ui";
+import Logo from "@/components/Logo";
 
 const NAV: { href: string; label: string; icon: IconName }[] = [
   { href: "/admin/dashboard", label: "Dashboard", icon: "grid" },
@@ -52,15 +53,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
   return (
     <div className="plut-dark plut-glow min-h-screen bg-slate-50 text-slate-900 lg:flex">
       <aside className="hidden w-64 shrink-0 flex-col bg-neutral-950 text-neutral-300 lg:sticky lg:top-0 lg:flex lg:h-screen">
-        <div className="flex items-center gap-3 px-6 py-6">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 font-bold text-neutral-950 shadow-lg shadow-emerald-500/20">
-            P
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-white">PLUT Kebumen</p>
-            <p className="text-xs text-neutral-500">Panel Admin</p>
-          </div>
-        </div>
+        <div className="px-5 py-6"><Logo size="h-12" className="w-full" /><p className="mt-3 text-center text-xs font-medium uppercase tracking-[0.18em] text-neutral-500">Panel Admin</p></div>
 
         <nav className="flex-1 space-y-1 px-3">
           {NAV.map((n) => (
@@ -91,7 +84,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
 
       <div className="min-w-0 flex-1">
         <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 lg:hidden">
-          <span className="text-sm font-semibold">PLUT Kebumen</span>
+          <Logo size="h-7" pad="px-3 py-1.5" />
           <nav className="flex items-center gap-1 text-sm">
             {NAV.map((n) => (
               <Link

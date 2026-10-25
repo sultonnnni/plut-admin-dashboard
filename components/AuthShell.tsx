@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import Logo from "@/components/Logo";
 
 export function SuccessMark() {
   return (
@@ -18,9 +19,7 @@ export default function AuthShell({ title, subtitle, children }: { title: string
 
       <div className="plut-pop-in relative w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-xl font-bold text-neutral-950 shadow-lg shadow-emerald-500/20">
-            P
-          </div>
+          <Logo size="h-16 sm:h-20" className="mx-auto mb-6 w-fit" />
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-emerald-400">Pusat Layanan Usaha Terpadu</p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">{title}</h1>
           <p className="mt-2 text-sm text-neutral-400">{subtitle}</p>
